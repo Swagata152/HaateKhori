@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "275916286082",
+    "project_id": "alphabet-learning-daff7",
+    "storage_bucket": "alphabet-learning-daff7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275916286082:android:2086d0714b01c2c41f2c9b",
+        "android_client_info": {
+          "package_name": "com.example.alphabetlearning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275916286082-l43fe6oet47vo9lkucacrco9r88657ek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc5ijeWewBv9kzi8vnZcAdQDKF_Uxq2QQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275916286082-l43fe6oet47vo9lkucacrco9r88657ek.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "275916286082-hh38ed1atss3uu698fdvcsvnse8m8q0v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.alphabetlearning"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
