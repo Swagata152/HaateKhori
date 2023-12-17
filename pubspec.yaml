@@ -45,6 +45,7 @@ dependencies:
   augmented_reality_plugin: ^4.0.1
   model_viewer_plus: ^1.5.0
   text_to_speech: ^0.2.3
+  firebase_auth: ^4.3.0
 
 dev_dependencies:
   flutter_test:

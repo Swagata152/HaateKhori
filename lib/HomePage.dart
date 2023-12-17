@@ -2,6 +2,8 @@ import 'package:alphabetlearning/Alphabet.dart';
 import 'package:alphabetlearning/AnimalPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:alphabetlearning/LearningProgressPage.dart';
+import 'package:alphabetlearning/QuizPage.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -111,6 +113,24 @@ class _HomePageState extends State<HomePage> {
                               child: selectedOption(
                                 image: 'assets/animal.png',
                                 name: 'Animal',
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => LearningProgressPage()),);
+                              },
+                              child: selectedOption(
+                                image: 'assets/progress.png', // Replace with your progress image
+                                name: 'Learning Progress',
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => QuizPage()),);
+                              },
+                              child: selectedOption(
+                                image: 'assets/quiz.png', // Replace with your quiz image
+                                name: 'Alphabet Quiz',
                               ),
                             ),
                           ],
