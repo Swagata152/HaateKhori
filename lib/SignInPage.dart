@@ -5,12 +5,13 @@ import 'package:alphabetlearning/GlobalVariables.dart';
 
 class SignInPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController(); // Added password controller
   final FirestoreService firestoreService = FirestoreService();
 
-  Future<void> signInUser(String username, BuildContext context) async {
+  Future<void> signInUser(String username, String password, BuildContext context) async {
     try {
-      if (_usernameController.text.isEmpty) {
-        _showErrorSnackBar(context, 'Please enter your username.');
+      if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+        _showErrorSnackBar(context, 'Please enter your username and password.');
         return;
       }
 
@@ -20,6 +21,15 @@ class SignInPage extends StatelessWidget {
         _showErrorSnackBar(context, 'Username not found. Please check your username.');
         return;
       }
+
+      // Validate the password
+      bool passwordCorrect = await firestoreService.isPasswordCorrect(username, password);
+
+      if (!passwordCorrect) {
+        _showErrorSnackBar(context, 'Incorrect password. Please try again.');
+        return;
+      }
+
       GlobalVariables().userId = username;
       // Existing user, sign in
       Navigator.pushReplacement(
@@ -59,15 +69,23 @@ class SignInPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                if (_usernameController.text.isEmpty) {
-                  _showErrorSnackBar(context, 'Please enter your username.');
+                if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+                  _showErrorSnackBar(context, 'Please enter your username and password.');
                   return;
                 }
 
-                // Sign in the user based on the entered username
-                await signInUser(_usernameController.text, context);
+                // Sign in the user based on the entered username and password
+                await signInUser(_usernameController.text, _passwordController.text, context);
               },
               child: Text('Sign In'),
             ),

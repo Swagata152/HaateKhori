@@ -2,6 +2,8 @@ import 'package:alphabetlearning/GlobalVariables.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'HomePage.dart';
+
 class QuizPage extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
@@ -37,16 +39,12 @@ class _QuizPageState extends State<QuizPage> {
     bool correctAnswer = quizQuestions[currentQuestionIndex]['correctAnswer'];
     String correctionMessage =
     quizQuestions[currentQuestionIndex]['correctionMessage'];
-    String quizType = quizQuestions[currentQuestionIndex]['quizType'];
 
-    int scoreChange = selectedAnswer == correctAnswer ? 1 : -1;
+    int scoreChange = selectedAnswer == correctAnswer ? 1 : 0;
 
     setState(() {
       correctAnswers += scoreChange;
     });
-
-    // Update the user's score in Firestore
-    storeQuizSession(quizType, scoreChange);
 
     showDialog(
       context: context,
@@ -78,7 +76,8 @@ class _QuizPageState extends State<QuizPage> {
         currentQuestionIndex++;
       });
     } else {
-      // Quiz completed, show results
+      // Quiz completed, show results and update score
+      updateQuizSessionScore(correctAnswers);
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -88,7 +87,11 @@ class _QuizPageState extends State<QuizPage> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Close the current dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()), // Navigate to the home page
+                  );
                 },
                 child: Text('OK'),
               ),
@@ -99,26 +102,29 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
-  void storeQuizSession(String quizType, int scoreChange) {
+  void updateQuizSessionScore(int score) {
     String userId = GlobalVariables().userId; // Replace with the actual user ID
 
-    FirebaseFirestore.instance
-        .collection('quiz_sessions')
-        .doc(userId)
-        .get()
-        .then((docSnapshot) {
-      if (docSnapshot.exists) {
-        int updatedScore = scoreChange;
+    FirebaseFirestore.instance.collection('quiz_sessions').doc(userId).get().then(
+          (docSnapshot) {
+        if (docSnapshot.exists) {
 
-        FirebaseFirestore.instance.collection('quiz_sessions').doc(userId).update({
-          quizType + 'Score': updatedScore,
-        });
-      } else {
-        FirebaseFirestore.instance.collection('quiz_sessions').doc(userId).set({
-          quizType + 'Score': scoreChange,
-        });
-      }
-    });
+          FirebaseFirestore.instance
+              .collection('quiz_sessions')
+              .doc(userId)
+              .update({
+            'score': score,
+          });
+        } else {
+          FirebaseFirestore.instance
+              .collection('quiz_sessions')
+              .doc(userId)
+              .set({
+            'score': score,
+          });
+        }
+      },
+    );
   }
 
   @override

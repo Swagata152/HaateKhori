@@ -13,11 +13,30 @@ class FirestoreService {
     }
   }
 
-  Future<void> registerUser(String username, String name) async {
+  Future<bool> isPasswordCorrect(String username, String password) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where('username', isEqualTo: username).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Assuming there is only one user with a unique username
+        String storedPassword = querySnapshot.docs.first['password'];
+        return storedPassword == password;
+      } else {
+        // Username not found
+        return false;
+      }
+    } catch (e) {
+      print('Error checking password: $e');
+      return false;
+    }
+  }
+
+  Future<void> registerUser(String username, String name, String password) async {
     try {
       await usersCollection.add({
         'username': username,
         'name': name,
+        'password': password,
       });
     } catch (e) {
       print('Error registering user: $e');

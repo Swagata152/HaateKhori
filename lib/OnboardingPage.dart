@@ -4,16 +4,16 @@ import 'SignInPage.dart';
 import 'FirestoreService.dart';
 import 'package:alphabetlearning/GlobalVariables.dart';
 
-
 class OnboardingPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController(); // Added password controller
   final FirestoreService firestoreService = FirestoreService();
 
-  Future<void> onboardUser(String username, String name, bool isNewUser, BuildContext context) async {
+  Future<void> onboardUser(String username, String name, String password, bool isNewUser, BuildContext context) async {
     try {
       if (isNewUser) {
-        if (_usernameController.text.isEmpty || _nameController.text.isEmpty) {
+        if (_usernameController.text.isEmpty || _nameController.text.isEmpty || _passwordController.text.isEmpty) {
           _showErrorSnackBar(context, 'Please fill in all fields.');
           return;
         }
@@ -26,7 +26,7 @@ class OnboardingPage extends StatelessWidget {
         }
 
         // Register a new user
-        await firestoreService.registerUser(username, name);
+        await firestoreService.registerUser(username, name, password);
       }
       GlobalVariables().userId = username;
 
@@ -75,9 +75,17 @@ class OnboardingPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                if (_usernameController.text.isEmpty || _nameController.text.isEmpty) {
+                if (_usernameController.text.isEmpty || _nameController.text.isEmpty || _passwordController.text.isEmpty) {
                   _showErrorSnackBar(context, 'Please fill in all fields.');
                   return;
                 }
@@ -90,7 +98,7 @@ class OnboardingPage extends StatelessWidget {
                 }
 
                 // New user, register now
-                await onboardUser(_usernameController.text, _nameController.text, true, context);
+                await onboardUser(_usernameController.text, _nameController.text, _passwordController.text, true, context);
               },
               child: Text('Start Learning'),
             ),

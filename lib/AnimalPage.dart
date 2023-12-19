@@ -188,39 +188,36 @@ class AnimalCard extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  animal.description,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.volume_up_outlined),
-                      onPressed: () {
-                        tts.speak(animal.description);
-                      },
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ARViewPage(firebaseUrl: animal.modelUrl),
-                          ),
-                        );
-                      },
-                      child: Text('View in AR'),
-                    ),
-                  ],
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Text(
+                animal.description,
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
             ),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.volume_up_outlined),
+                onPressed: () {
+                  tts.speak(animal.description);
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ARViewPage(firebaseUrl: animal.modelUrl),
+                    ),
+                  );
+                },
+                child: Text('View in AR'),
+              ),
+            ],
           ),
         ],
       ),
